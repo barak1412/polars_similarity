@@ -1,7 +1,7 @@
 from polars_similarity.steps.feature_selection.base_sparse_feature_selector import BaseSparseFeatureSelector
 from typing import List
 import pandas as pd
-import scipy as sp
+import scipy.sparse as sp
 from sklearn.feature_selection import SelectFromModel
 
 
