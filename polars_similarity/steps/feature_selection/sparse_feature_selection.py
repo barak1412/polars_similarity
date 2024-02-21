@@ -11,6 +11,34 @@ _TFIDF_LABELS_MAPPING_ATTR = 'tfidf_labels_mapping'
 
 
 class SparseFeatureSelection(object):
+    """
+    Sparse features selection implementation for multiple sparse features.
+
+    Parameters
+    ----------
+    features_metadata: Dict[str, Dict[str, Any]]
+        Metadata of the given features in the form of dictionary.
+        For example,
+            {
+                'feature1': {
+                    'feature1_col':{
+                        'tfidf_labels_mapping': 0: 'l0', 1: 'l3'}
+                    }
+                }
+            }
+
+    features_cols: List[str], Optional
+        List of sparse features we want to apply selection on.
+        If not give, will be applied to all of them.
+
+    sparse_feature_selector: BaseSparseFeatureSelector, Optional
+        Strategy for how to perform the actual selection.
+
+    Returns
+    -------
+    Tuple of the new features dataframe after selection, and the updated features metadata.
+    We have to update the features metadata because the mapping indices can be changed in tfidf based features columns.
+    """
     def __init__(self, features_metadata: Dict[str, Dict[str, Any]],
                  features_cols: List[str] = None,
                  sparse_feature_selector: BaseSparseFeatureSelector = None):
@@ -36,7 +64,7 @@ class SparseFeatureSelection(object):
         resulted_X = X.copy()
         for feature_name in self._features_metadata:
             for feature_col in self._features_metadata[feature_name]:
-                # we skip non sparse or non relevant columns (column the user didn't want)
+                # we skip non sparse or non relevant columns (columns the user didn't want)
                 if feature_col in features_cols and SparseFeatureSelection._is_sparse_column(X, feature_col):
                     resulted_X[feature_col], feature_indices_mapping = self._select_from_sparse_feature(X[feature_col], y)
 

@@ -6,6 +6,9 @@ from sklearn.feature_selection import SelectFromModel
 
 
 class ModelSparseFeatureSelector(BaseSparseFeatureSelector):
+    """
+    Model based implementation of the sparse feature selector interface.
+    """
     def __init__(self, estimator: object, threshold='mean'):
         self._estimator = estimator
         self._threshold = threshold
